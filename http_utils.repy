@@ -1,0 +1,8 @@
+def make_request(url) {
+    import requests
+    response = requests.get(url)
+    return {
+        "status": response.status_code,
+        "json": response.json()
+    }
+}
