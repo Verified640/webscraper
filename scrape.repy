@@ -1,0 +1,48 @@
+/* Web Scraping Stock Market Data */
+
+include 'http_utils.repy'
+
+def fetch_stock_data(ticker) {
+    url = f"https://api.example.com/stock/{ticker}"
+    response = make_request(url)
+
+    if response['status'] != 200 {
+        print("Failed to fetch stock data.")
+        return None
+    }
+
+    data = response['json']
+    return data
+}
+
+def analyze_stock_data(data) {
+    highest = max(data['prices'])
+    lowest = min(data['prices'])
+    average = sum(data['prices']) / len(data['prices'])
+
+    return {
+        "highest": highest,
+        "lowest": lowest,
+        "average": average
+    }
+}
+
+def generate_report(ticker) {
+    data = fetch_stock_data(ticker)
+    if data == None {
+        return "No data available."
+    }
+
+    analysis = analyze_stock_data(data)
+    report = f"Stock Report for {ticker}:\n"
+    report += f"Highest Price: {analysis['highest']}\n"
+    report += f"Lowest Price: {analysis['lowest']}\n"
+    report += f"Average Price: {analysis['average']}"
+
+    return report
+}
+
+/* Using function chaining */
+ticker = input("Enter a stock ticker:")
+report = ticker |> fetch_stock_data |> analyze_stock_data |> generate_report
+print(report)
